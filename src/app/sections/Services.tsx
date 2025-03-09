@@ -1,12 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import {
-  FaCode,
-  FaBrain,
-  FaCloud,
-  FaShieldAlt,
-  FaRocket,
-} from "react-icons/fa";
+import { FaCode, FaBrain, FaCloud, FaRocket } from "react-icons/fa";
 import DotsBackground from "../components/DotsBackground"; // Background dots effect
 
 const services = [
