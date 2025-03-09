@@ -1,0 +1,40 @@
+{
+  "name": "metaspace-onepagelove",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fontsource/montserrat": "^5.2.5",
+    "@radix-ui/react-slot": "^1.1.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.4.10",
+    "lucide-react": "^0.479.0",
+    "next": "15.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-scroll": "^1.9.3",
+    "react-simple-typewriter": "^5.0.1",
+    "tailwind-merge": "^3.0.2",
+    "tailwind-variants": "^1.0.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/react-scroll": "^1.8.10",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
