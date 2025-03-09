@@ -1,7 +1,14 @@
 "use client";
+import { useEffect, useRef } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import { Link } from "react-scroll";
-import { useEffect, useRef } from "react";
+
+type Particle = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+};
 
 const Home = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -9,32 +16,26 @@ const Home = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animationFrameId: number;
-    const particles: { x: number; y: number; vx: number; vy: number }[] = [];
+    const dpr = window.devicePixelRatio || 1; // Improve resolution
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    ctx.scale(dpr, dpr);
 
-    // Resize canvas dynamically
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      particles.length = 0; // Reset particles to prevent duplicates
+    const numParticles = window.innerWidth < 768 ? 80 : 180;
+    const particleSize = window.innerWidth < 768 ? 1 : 2;
+    const particles: Particle[] = []; // ✅ Fix: Explicitly define type
 
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-
-      // Create Neuron Effect with particles starting at the center
-      for (let i = 0; i < 180; i++) {
-        particles.push({
-          x: centerX + (Math.random() - 0.5) * canvas.width * 0.6,
-          y: centerY + (Math.random() - 0.5) * canvas.height * 0.6,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5,
-        });
-      }
-    };
+    for (let i = 0; i < numParticles; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+      });
+    }
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -44,23 +45,20 @@ const Home = () => {
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        // Keep inside bounds
         if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
         if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
 
-        // Draw Particle
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
+        ctx.arc(particle.x, particle.y, particleSize, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw Connections
         for (let j = index + 1; j < particles.length; j++) {
           const dx = particles[j].x - particle.x;
           const dy = particles[j].y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 80) {
-            ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / 80})`;
+          if (distance < 100) {
+            ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / 100})`;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
@@ -70,30 +68,23 @@ const Home = () => {
         }
       });
 
-      animationFrameId = requestAnimationFrame(draw);
+      requestAnimationFrame(draw);
     };
 
-    resizeCanvas(); // Set initial canvas size
-    window.addEventListener("resize", resizeCanvas); // Listen for screen changes
     draw();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resizeCanvas);
-    };
   }, []);
 
   return (
     <section
       id="home"
-      className="relative h-screen flex flex-col items-center justify-center text-center text-white overflow-hidden bg-[radial-gradient(circle_at_top_left,_#011627,_#03071e)]">
+      className="relative min-h-screen flex flex-col items-center justify-center text-center text-white overflow-hidden bg-[radial-gradient(circle_at_top_left,_#011627,_#03071e)] px-6 md:px-12">
       {/* Background Animation */}
       <canvas
         ref={canvasRef}
         className="absolute top-0 left-0 w-full h-full opacity-30"></canvas>
 
-      {/* Hero Text */}
-      <h1 className="text-5xl md:text-7xl font-extrabold leading-tight relative z-10">
+      {/* Home Text */}
+      <h1 className="text-4xl md:text-7xl font-extrabold leading-tight relative z-10">
         Innovate. Build.{" "}
         <span className="bg-gradient-to-r from-[#EF4346] via-[#FACC15] to-[#8A2BE2] text-transparent bg-clip-text animate-gradient">
           <Typewriter
@@ -115,7 +106,7 @@ const Home = () => {
       </p>
 
       {/* CTA Buttons */}
-      <div className="flex gap-6 mt-6 relative z-10">
+      <div className="flex flex-col md:flex-row gap-6 mt-6 relative z-10">
         {/* Get Started Button - Scrolls to Contact */}
         <Link
           to="contact"

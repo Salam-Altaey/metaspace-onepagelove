@@ -38,8 +38,8 @@ const Navbar = () => {
       className={`fixed top-6 left-1/2 transform -translate-x-1/2 w-[90%] md:w-[60%] lg:w-[50%] transition-all z-50
       ${
         isScrolled
-          ? "bg-black/50 backdrop-blur-md shadow-lg"
-          : "bg-white/10 backdrop-blur-xl shadow-lg"
+          ? "bg-black/50 backdrop-blur-xs shadow-lg"
+          : "bg-white/10 backdrop-blur-xs shadow-lg"
       }
       rounded-2xl px-6 py-3 flex items-center justify-between`}>
       {/* Logo */}
